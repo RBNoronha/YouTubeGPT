@@ -24,6 +24,12 @@ builder.Services.AddMarkdown();
 
 builder.Services.AddScoped<BuildVectorDatabaseOperationHandler>();
 
+// Add support for user profiles with the ability to save preferences and settings
+builder.Services.AddScoped<UserProfileService>();
+
+// Provide options for users to upload and use custom avatars in the chat
+builder.Services.AddScoped<AvatarService>();
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();

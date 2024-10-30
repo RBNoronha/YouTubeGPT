@@ -7,7 +7,7 @@
             <MudTabPanel Icon="@Icons.Material.Filled.Quickreply" Text="Answer" ToolTip="Answer text">
                 <ChildContent>
                     <MudPaper Class="pa-6" Elevation="3">
-                        <MudText Typo="Typo.body1">
+                        <MudText Typo="Typo.body1" Class="pa-2" Style="padding: 10px; margin: 10px;">
                             @((MarkupString)Markdown.Parse(ProvidedAnswer))
                         </MudText>
                     </MudPaper>

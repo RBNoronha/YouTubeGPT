@@ -87,6 +87,7 @@ public class BuildVectorDatabaseOperationHandler(
             await yt.Videos.ClosedCaptions.WriteToAsync(track, textWriter);
 
             var captions = textWriter.ToString();
+            var additionalMetadata = JsonSerializer.Serialize(new { VideoId = playlistVideo.Id, Title = playlistVideo.Title });
             var key1 = await memory.SaveInformationAsync($"{channel.Id}_{Constants.CaptionsCollectionSuffix}", captions, playlistVideo.Id, additionalMetadata: additionalMetadata);
 
             await SaveVideoDescription(channel, playlistVideo);

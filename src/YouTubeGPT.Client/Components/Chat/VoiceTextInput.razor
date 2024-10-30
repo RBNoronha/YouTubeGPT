@@ -8,3 +8,14 @@
               OnKeyUp="@OnKeyUpAsync" Clearable="true"
               Counter="1_000" MaxLength="1_000"
               autocomplete="off" title="@HelperText" />
+
+@if (_isReceivingResponse)
+{
+    <MudText Typo="Typo.caption" Color="Color.Secondary">
+        Typing...
+    </MudText>
+}
+
+@code {
+    private bool _isReceivingResponse = false;
+}

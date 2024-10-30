@@ -1,21 +1,32 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider @rendermode="InteractiveServer" />
-<MudPopoverProvider @rendermode="InteractiveServer" />
-<MudDialogProvider @rendermode="InteractiveServer" />
-<MudSnackbarProvider @rendermode="InteractiveServer" />
+<MudThemeProvider @bind-IsDarkMode="IsDarkMode" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar Elevation="0">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" OnClick="ToggleDrawer" />
         <MudSpacer />
         <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
                        Href="https://github.com/azure-samples/YouTubeGPT/" Target="_blank" />
+        <MudSwitch @bind-Checked="IsDarkMode" Color="Color.Inherit" T="bool" />
     </MudAppBar>
-    <MudDrawer Open="true" Elevation="1">
+    <MudDrawer @bind-Open="IsDrawerOpen" Elevation="1">
         <MudDrawerHeader>
             <MudText Typo="Typo.h6">YouTubeGPT</MudText>
         </MudDrawerHeader>
         <NavMenu />
+    </MudDrawer>
+    <MudDrawer Open="true" Elevation="1" Anchor="Anchor.Start">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">Quick Links</MudText>
+        </MudDrawerHeader>
+        <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+        <MudNavLink Href="/features" Icon="@Icons.Material.Filled.Star">Features</MudNavLink>
+        <MudNavLink Href="/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
+        <MudNavLink Href="/profile" Icon="@Icons.Material.Filled.Person">Profile</MudNavLink>
     </MudDrawer>
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
@@ -23,3 +34,13 @@
         </MudContainer>
     </MudMainContent>
 </MudLayout>
+
+@code {
+    private bool IsDrawerOpen { get; set; } = true;
+    private bool IsDarkMode { get; set; } = false;
+
+    private void ToggleDrawer()
+    {
+        IsDrawerOpen = !IsDrawerOpen;
+    }
+}

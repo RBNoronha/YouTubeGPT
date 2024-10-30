@@ -12,8 +12,15 @@
     </style>
 </HeadContent>
 
-
 <MudGrid Justify="Justify.Center">
+    <MudItem xs="12" lg="2">
+        <MudSelect T="string" Label="Language" @bind-Value="SelectedLanguage" Variant="Variant.Outlined">
+            <MudSelectItem Value="en">English</MudSelectItem>
+            <MudSelectItem Value="es">Spanish</MudSelectItem>
+            <MudSelectItem Value="fr">French</MudSelectItem>
+            <MudSelectItem Value="de">German</MudSelectItem>
+        </MudSelect>
+    </MudItem>
     <MudItem id="answers" xs="12" Class="overflow-x-auto">
         <MudStack Reverse="@IsReversed" Spacing="12">
             @foreach (var ((question, askedOn), answer) in _questionAndAnswerMap)
@@ -77,7 +84,7 @@
                             <MudFab Color="Color.Primary" Size="Size.Medium"
                                     StartIcon=@Icons.Material.Filled.DeleteForever
                                     aria-label="Clear chat."
-                                    OnClick="@OnClearChat" Disabled=@(_isReceivingResponse || _questionAndAnswerMap is { Count: 0 }) />
+                                    OnClick="@OnClearChatAsync" Disabled=@(_isReceivingResponse || _questionAndAnswerMap is { Count: 0 }) />
                         </MudTooltip>
                     </MudItem>
                 </MudGrid>
@@ -90,3 +97,7 @@
         <MudFab Color="Color.Primary" IconSize="Size.Large" StartIcon="@Icons.Material.Filled.ArrowUpward" />
     </MudScrollToTop>
 </MudGrid>
+
+@code {
+    private string SelectedLanguage { get; set; } = "en";
+}
