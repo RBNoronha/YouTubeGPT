@@ -27,7 +27,7 @@ public partial class Home
     public required CollectionSelection CollectionSelectionPlugin { get; set; }
 
     [Inject]
-    public IJSRuntime JSRuntime { get; set; }
+    public required IJSRuntime JSRuntime { get; set; }
 
     [CascadingParameter(Name = nameof(IsReversed))]
     public required bool IsReversed { get; set; }

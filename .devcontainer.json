@@ -1,5 +1,5 @@
 {
   "tasks": {
-    "build": "dotnet workload restore --project /workspaces/YouTubeGPT/src/YouTubeGPT.AppHost/YouTubeGPT.AppHost.csproj && dotnet run"
+    "build": "dotnet run --project /workspaces/YouTubeGPT/src/YouTubeGPT.AppHost/YouTubeGPT.AppHost.csproj"
   }
 }
