@@ -84,7 +84,7 @@
                             <MudFab Color="Color.Primary" Size="Size.Medium"
                                     StartIcon=@Icons.Material.Filled.DeleteForever
                                     aria-label="Clear chat."
-                                    OnClick="@OnClearChat" Disabled=@(_isReceivingResponse || _questionAndAnswerMap is { Count: 0 }) />
+                                    OnClick="@OnClearChatAsync" Disabled=@(_isReceivingResponse || _questionAndAnswerMap is { Count: 0 }) />
                         </MudTooltip>
                     </MudItem>
                 </MudGrid>
