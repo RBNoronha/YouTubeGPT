@@ -11,7 +11,7 @@
         <MudSpacer />
         <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
                        Href="https://github.com/azure-samples/YouTubeGPT/" Target="_blank" />
-        <MudSwitch @bind-Checked="IsDarkMode" Color="Color.Inherit" />
+        <MudSwitch @bind-Checked="IsDarkMode" Color="Color.Inherit" T="bool" />
     </MudAppBar>
     <MudDrawer @bind-Open="IsDrawerOpen" Elevation="1">
         <MudDrawerHeader>
