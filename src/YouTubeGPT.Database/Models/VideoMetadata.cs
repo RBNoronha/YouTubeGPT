@@ -10,4 +10,5 @@ public class VideoMetadata
     public string Url { get; set; } = null!;
     public DateTimeOffset UploadDate { get; set; }
     public IReadOnlyList<string> Keywords { get; set; } = [];
+    public string Transcription { get; set; } = null!;
 }

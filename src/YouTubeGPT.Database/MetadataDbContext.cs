@@ -5,4 +5,5 @@ namespace YouTubeGPT.Ingestion;
 public class MetadataDbContext(DbContextOptions<MetadataDbContext> options) : DbContext(options)
 {
     public DbSet<MemoryMetadata> Metadata { get; set; }
+    public DbSet<VideoMetadata> VideoTranscriptions { get; set; }
 }

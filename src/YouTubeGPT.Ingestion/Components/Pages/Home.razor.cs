@@ -35,7 +35,7 @@ public partial class Home
             {
                 progress = p;
                 StateHasChanged();
-            }), model.MaxVideos);
+            }), model.MaxVideos, TimeSpan.FromMinutes(model.MinDuration));
             Snackbar.Add("Index built successfully", Severity.Success);
         }
         catch (Exception ex)

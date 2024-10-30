@@ -57,4 +57,6 @@ builder.AddProject<Projects.YouTubeGPT_Client>("youtubegpt-client")
     .WithConfiguration("Azure:AI:ChatDeploymentName")
     .WithExternalHttpEndpoints();
 
+builder.Services.AddScoped<BuildVectorDatabaseOperationHandler>();
+
 builder.Build().Run();

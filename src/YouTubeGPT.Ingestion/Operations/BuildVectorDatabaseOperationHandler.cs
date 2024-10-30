@@ -73,23 +73,24 @@ public class BuildVectorDatabaseOperationHandler(
                 continue;
             }
 
-            //logger.LogInformation("Downloading transcript for '{Title}' ({Id})", playlistVideo.Title, playlistVideo.Id);
-            //var trackManifest = await yt.Videos.ClosedCaptions.GetManifestAsync(playlistVideo.Id);
-            //var track = trackManifest.TryGetByLanguage("en");
-            //if (track is null)
-            //{
-            //    logger.LogInformation("Video {Id} doesn't have an English transcript", playlistVideo.Id);
-            //    continue;
-            //}
+            logger.LogInformation("Downloading transcript for '{Title}' ({Id})", playlistVideo.Title, playlistVideo.Id);
+            var trackManifest = await yt.Videos.ClosedCaptions.GetManifestAsync(playlistVideo.Id);
+            var track = trackManifest.TryGetByLanguage("en");
+            if (track is null)
+            {
+                logger.LogInformation("Video {Id} doesn't have an English transcript", playlistVideo.Id);
+                continue;
+            }
 
-            //await Console.Out.WriteLineAsync($"Downloading caption for '{playlistVideo.Title}'");
-            //using var textWriter = new StringWriter();
-            //await yt.Videos.ClosedCaptions.WriteToAsync(track, textWriter);
+            await Console.Out.WriteLineAsync($"Downloading caption for '{playlistVideo.Title}'");
+            using var textWriter = new StringWriter();
+            await yt.Videos.ClosedCaptions.WriteToAsync(track, textWriter);
 
-            //var captions = textWriter.ToString();
-            //var key1 = await memory.SaveInformationAsync($"{channel.Id}_{Constants.CaptionsCollectionSuffix}", captions, playlistVideo.Id, additionalMetadata: additionalMetadata);
+            var captions = textWriter.ToString();
+            var key1 = await memory.SaveInformationAsync($"{channel.Id}_{Constants.CaptionsCollectionSuffix}", captions, playlistVideo.Id, additionalMetadata: additionalMetadata);
 
             await SaveVideoDescription(channel, playlistVideo);
+            await SaveVideoTranscription(channel, playlistVideo, captions);
 
             // only increment the video count if we've successfully saved the video to memory
             videoCount++;
@@ -141,5 +142,27 @@ public class BuildVectorDatabaseOperationHandler(
         var key = await memory.SaveInformationAsync($"{channel.Id}_{Constants.DescriptionsCollectionSuffix}", text, video.Id, additionalMetadata: additionalMetadata);
 
         logger.LogInformation("Video {VideoTitle}({VideoId}) has been saved to memory with key {Key}.", video.Title, video.Id, key);
+    }
+
+    private async Task SaveVideoTranscription(Channel channel, PlaylistVideo playlistVideo, string transcription)
+    {
+        var video = await yt.Videos.GetAsync(playlistVideo.Id);
+
+        var videoMetadata = new VideoMetadata()
+        {
+            Description = video.Description,
+            Title = video.Title,
+            Duration = video.Duration,
+            Author = video.Author,
+            Url = video.Url,
+            UploadDate = video.UploadDate,
+            Keywords = video.Keywords
+        };
+
+        var additionalMetadata = JsonSerializer.Serialize(videoMetadata);
+
+        var key = await memory.SaveInformationAsync($"{channel.Id}_{Constants.CaptionsCollectionSuffix}", transcription, video.Id, additionalMetadata: additionalMetadata);
+
+        logger.LogInformation("Video {VideoTitle}({VideoId}) transcription has been saved to memory with key {Key}.", video.Title, video.Id, key);
     }
 }

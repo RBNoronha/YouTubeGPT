@@ -22,6 +22,8 @@ builder.Services.AddMudServices();
 
 builder.Services.AddMarkdown();
 
+builder.Services.AddScoped<BuildVectorDatabaseOperationHandler>();
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
