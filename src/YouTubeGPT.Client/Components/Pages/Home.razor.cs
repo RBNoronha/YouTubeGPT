@@ -5,6 +5,9 @@ using Microsoft.SemanticKernel.Plugins.Memory;
 using YouTubeGPT.Client.Models;
 using YouTubeGPT.Client.Plugins;
 using YouTubeGPT.Ingestion;
+using System.Globalization;
+using System.Text.Json;
+using Microsoft.JSInterop;
 
 namespace YouTubeGPT.Client.Components.Pages;
 public partial class Home
@@ -23,18 +26,24 @@ public partial class Home
     [Inject]
     public required CollectionSelection CollectionSelectionPlugin { get; set; }
 
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+
     [CascadingParameter(Name = nameof(IsReversed))]
     public required bool IsReversed { get; set; }
 
     private string Prompt = "";
 
-    private readonly Dictionary<UserQuestion, string?> _questionAndAnswerMap = [];
+    private Dictionary<UserQuestion, string?> _questionAndAnswerMap = new();
 
     private bool _isReceivingResponse = false;
 
-    protected override void OnInitialized()
+    private string SelectedLanguage { get; set; } = "en";
+
+    protected override async Task OnInitializedAsync()
     {
         SetupSemanticKernel();
+        await LoadChatHistoryAsync();
     }
 
     private void SetupSemanticKernel()
@@ -92,12 +101,30 @@ public partial class Home
 
         Prompt = "";
         _isReceivingResponse = false;
+
+        await SaveChatHistoryAsync();
     }
 
-    private void OnClearChat()
+    private async Task OnClearChatAsync()
     {
         Prompt = "";
         _questionAndAnswerMap.Clear();
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "chatHistory");
+    }
+
+    private async Task SaveChatHistoryAsync()
+    {
+        var chatHistory = JsonSerializer.Serialize(_questionAndAnswerMap);
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "chatHistory", chatHistory);
+    }
+
+    private async Task LoadChatHistoryAsync()
+    {
+        var chatHistory = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "chatHistory");
+        if (!string.IsNullOrEmpty(chatHistory))
+        {
+            _questionAndAnswerMap = JsonSerializer.Deserialize<Dictionary<UserQuestion, string?>>(chatHistory) ?? new();
+        }
     }
 
     record CollectionInfo(string ChannelId, string Title);

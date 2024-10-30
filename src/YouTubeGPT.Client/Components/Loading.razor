@@ -3,7 +3,17 @@
 </MudText>
 <MudProgressCircular Color="Color.Secondary" Indeterminate="true" Class="pb-4" />
 
+@if (IsTyping)
+{
+    <MudText Typo="Typo.caption" Color="Color.Secondary">
+        Typing...
+    </MudText>
+}
+
 @code {
     [Parameter]
     public string BusyMessage { get; set; } = "🤖 I'm generating an answer... Please wait.";
+
+    [Parameter]
+    public bool IsTyping { get; set; } = false;
 }
